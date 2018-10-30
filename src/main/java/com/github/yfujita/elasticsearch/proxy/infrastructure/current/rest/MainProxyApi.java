@@ -1,5 +1,6 @@
 package com.github.yfujita.elasticsearch.proxy.infrastructure.current.rest;
 
+import com.github.yfujita.elasticsearch.proxy.settings.ProxySettings;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -12,8 +13,8 @@ import static spark.Spark.*;
 
 public class MainProxyApi extends AbstractRestApi {
 
-    public MainProxyApi(final OkHttpClient client) {
-        super(client);
+    public MainProxyApi(final OkHttpClient client, final ProxySettings settings) {
+        super(client, settings);
     }
 
     @Override
@@ -33,9 +34,9 @@ public class MainProxyApi extends AbstractRestApi {
         final RequestBody esRequestBody = RequestBody.create (MIMEType,body);
 
         HttpUrl.Builder httpUrlBuilder = new HttpUrl.Builder()
-            .host("localhost")
-            .port(9200)
-            .scheme("http")
+            .host(settings.esHost)
+            .port(settings.esPort)
+            .scheme(settings.esSchema)
             .addPathSegments(path);
         request.queryParams().stream().forEach(key ->
             httpUrlBuilder.addQueryParameter(key, request.queryParams(key)));

@@ -30,14 +30,14 @@ public class EsProxyServer {
     }
 
     private void initialize() {
-        port(8090);
+        port(settings.port);
         threadPool(8, 2, 300000);
     }
 
     private void routing() {
         final OkHttpClient client = new OkHttpClient();
         final ApiRouter router = new ApiRouter();
-        router.addApi(new MainProxyApi(client));
+        router.addApi(new MainProxyApi(client, settings));
         router.routing();
     }
 }
